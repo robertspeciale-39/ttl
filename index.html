@@ -644,6 +644,8 @@ span.fb { display: inline-block; margin: 0; padding: 2px var(--sp-2); font-size:
   body.playing .banner, body.playing .banner.on { min-height: 92px; padding: var(--sp-1) var(--sp-3); font-size: var(--fs-sm); line-height: 1.35; margin-bottom: var(--sp-1); }
   body.playing .touch { margin-top: var(--sp-2); }
 }
+.intro-btns { margin: var(--sp-4) 0 0; }
+.intro-btns #q-go { margin-top: 0; }
 
 </style>
 </head>
@@ -1563,7 +1565,7 @@ function startWorld(w, full, resume) {
 }
 function intro(w) {
   const T = TOPICS[w];
-  ovInfo(`<p class="q-title">WORLD ${w + 1} · ${esc(T.world.toUpperCase())}</p><h2 class="q-text">Topic ${T.n}: ${esc(T.name)}</h2>
+  ovOpen(`<p class="q-title">WORLD ${w + 1} · ${esc(T.world.toUpperCase())}</p><h2 class="q-text">Topic ${T.n}: ${esc(T.name)}</h2>
     <p class="fb">${esc(T.intro)}</p>
     <ul class="howto">
       <li><b>Move:</b> arrow keys or A / D. <b>Jump:</b> Space, W, or the up arrow. On a touch screen, use the buttons under the game.</li>
@@ -1571,7 +1573,9 @@ function intro(w) {
       <li><b>Answer blocks:</b> jump up and hit the block with the right answer. <b>Packet pickups:</b> jump to collect only the chips that fit the rule.</li>
       <li>A wrong answer or a hit costs 1 TTL. At TTL 0 your packet is dropped and you restart from the last checkpoint.</li>
       <li>Your report counts <b>first tries</b>. Missed questions come back before the boss: <b>${esc(T.boss)}</b>.</li>
-    </ul>`, 'Start world');
+    </ul><div class="btn-row intro-btns"><button type="button" class="btn" id="q-go">Start world</button><button type="button" class="btn btn-ghost" id="q-back">Back to Choose a World</button></div>`);
+  $('#q-go').onclick = ovClose;
+  $('#q-back').onclick = () => { S.run = null; save(); ovClose(); show('map'); };   // nothing played yet, so drop the run
 }
 function pauseMenu() {
   if (!GM || GM.paused) return;
